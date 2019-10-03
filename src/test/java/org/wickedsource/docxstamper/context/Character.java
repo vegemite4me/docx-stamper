@@ -2,11 +2,15 @@ package org.wickedsource.docxstamper.context;
 
 public class Character {
 
-    private final String name;
+    private String name;
 
-    private final String actor;
+    private String actor;
 
-    private final Boolean child;
+    private Boolean child;
+
+    public Character() {
+
+    }
 
     public Character(String name, String actor) {
         this.name = name;

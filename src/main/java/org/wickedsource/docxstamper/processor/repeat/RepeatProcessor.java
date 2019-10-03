@@ -10,6 +10,8 @@ import org.wickedsource.docxstamper.api.typeresolver.TypeResolverRegistry;
 import org.wickedsource.docxstamper.el.ExpressionResolver;
 import org.wickedsource.docxstamper.processor.BaseCommentProcessor;
 import org.wickedsource.docxstamper.processor.CommentProcessingException;
+import org.wickedsource.docxstamper.proxy.ProxyBuilder;
+import org.wickedsource.docxstamper.proxy.ProxyException;
 import org.wickedsource.docxstamper.replace.PlaceholderReplacer;
 import org.wickedsource.docxstamper.util.CommentUtil;
 import org.wickedsource.docxstamper.util.walk.BaseDocumentWalker;
@@ -46,10 +48,23 @@ public class RepeatProcessor extends BaseCommentProcessor implements IRepeatProc
             int index = rCoords.getIndex();
             for (final Object expressionContext : expressionContexts) {
                 Tr rowClone = XmlUtils.deepCopy(rCoords.getRow());
+                ProxyBuilder<Object> commentProxyBuilder = (ProxyBuilder<Object>) getCurrentCommentWrapper().getParentProxyBuilder().clone();
+                commentProxyBuilder.withRoot(expressionContext);
+
+                Object expressionContextWithInterfaces = null;
+                try {
+                    Object eCtx = commentProxyBuilder.build();
+                    expressionContextWithInterfaces = eCtx;
+                } catch (ProxyException pex) {
+                    pex.printStackTrace(System.err);
+                    System.err.println("Can't instanciate proxy for comment, using root proxy");
+                }
+                final Object eCtx = expressionContextWithInterfaces != null ? expressionContextWithInterfaces : expressionContext;
+
                 DocumentWalker walker = new BaseDocumentWalker(rowClone) {
                     @Override
                     protected void onParagraph(P paragraph) {
-                        placeholderReplacer.resolveExpressionsForParagraph(paragraph, expressionContext, document);
+                        placeholderReplacer.resolveExpressionsForParagraph(paragraph, eCtx, document);
                     }
                 };
                 walker.walk();

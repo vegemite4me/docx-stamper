@@ -71,5 +71,11 @@ public class ProxyBuilder<T> {
     }
   }
 
-
+  @Override
+  public ProxyBuilder<T> clone() {
+    ProxyBuilder<T> cloned = new ProxyBuilder<T>();
+    cloned.withRoot(root);
+    cloned.interfacesToImplementations = interfacesToImplementations;
+    return cloned;
+  }
 }
