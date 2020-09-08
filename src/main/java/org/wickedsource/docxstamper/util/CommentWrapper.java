@@ -3,6 +3,7 @@ package org.wickedsource.docxstamper.util;
 import org.docx4j.wml.CommentRangeEnd;
 import org.docx4j.wml.CommentRangeStart;
 import org.docx4j.wml.Comments;
+import org.wickedsource.docxstamper.proxy.ProxyBuilder;
 
 public class CommentWrapper {
 
@@ -12,10 +13,13 @@ public class CommentWrapper {
 
     private CommentRangeEnd commentRangeEnd;
 
-    public CommentWrapper(Comments.Comment comment, CommentRangeStart commentRangeStart, CommentRangeEnd commentRangeEnd) {
+    private ProxyBuilder<?> parentProxyBuilder;
+
+    public CommentWrapper(Comments.Comment comment, CommentRangeStart commentRangeStart, CommentRangeEnd commentRangeEnd, ProxyBuilder<?> parentProxyBuilder) {
         this.comment = comment;
         this.commentRangeStart = commentRangeStart;
         this.commentRangeEnd = commentRangeEnd;
+        this.parentProxyBuilder = parentProxyBuilder;
     }
 
     public CommentWrapper() {
@@ -33,6 +37,10 @@ public class CommentWrapper {
         return commentRangeEnd;
     }
 
+    public ProxyBuilder<?> getParentProxyBuilder() {
+        return parentProxyBuilder;
+    }
+
     void setComment(Comments.Comment comment) {
         this.comment = comment;
     }
@@ -43,5 +51,9 @@ public class CommentWrapper {
 
     void setCommentRangeEnd(CommentRangeEnd commentRangeEnd) {
         this.commentRangeEnd = commentRangeEnd;
+    }
+
+    void setParentProxyBuilder(ProxyBuilder<?> parentProxyBuilder) {
+        this.parentProxyBuilder = parentProxyBuilder;
     }
 }

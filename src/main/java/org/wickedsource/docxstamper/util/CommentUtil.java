@@ -11,6 +11,7 @@ import org.jvnet.jaxb2_commons.ppp.Child;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wickedsource.docxstamper.api.DocxStamperException;
+import org.wickedsource.docxstamper.proxy.ProxyBuilder;
 import org.wickedsource.docxstamper.util.walk.BaseDocumentWalker;
 import org.wickedsource.docxstamper.util.walk.DocumentWalker;
 
@@ -194,10 +195,10 @@ public class CommentUtil {
 	}
 
 	public static Map<BigInteger, CommentWrapper> getComments(
-			WordprocessingMLPackage document) {
+			WordprocessingMLPackage document, final ProxyBuilder<?> proxyBuilder) {
 		Map<BigInteger, CommentWrapper> comments = new HashMap<>();
 		collectCommentRanges(comments, document);
-		collectComments(comments, document);
+		collectComments(comments, document, proxyBuilder);
 		return comments;
 	}
 
@@ -230,7 +231,7 @@ public class CommentUtil {
 	}
 
 	private static void collectComments(final Map<BigInteger, CommentWrapper> comments,
-			WordprocessingMLPackage document) {
+			WordprocessingMLPackage document, final ProxyBuilder<?> proxyBuilder) {
 		try {
 			CommentsPart commentsPart = (CommentsPart) document.getParts()
 					.get(new PartName("/word/comments.xml"));
@@ -239,6 +240,7 @@ public class CommentUtil {
 					CommentWrapper commentWrapper = comments.get(comment.getId());
 					if (commentWrapper != null) {
 						commentWrapper.setComment(comment);
+						commentWrapper.setParentProxyBuilder(proxyBuilder);
 					}
 				}
 			}

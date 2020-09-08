@@ -77,7 +77,7 @@ public class CommentProcessorRegistry {
    * @param <T>         type of the contextRoot object.
    */
   public <T> void runProcessors(final WordprocessingMLPackage document, final ProxyBuilder<T> proxyBuilder) {
-    final Map<BigInteger, CommentWrapper> comments = CommentUtil.getComments(document);
+    final Map<BigInteger, CommentWrapper> comments = CommentUtil.getComments(document, proxyBuilder);
     final List<CommentWrapper> proceedComments = new ArrayList<>();
 
     CoordinatesWalker walker = new BaseCoordinatesWalker(document) {

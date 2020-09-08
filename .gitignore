@@ -2,7 +2,9 @@
 *.iml
 settings.xml
 /target/
+/build/
 /.classpath
 /.DS_Store
 /.project
 /.gradle/
+~$*.docx
